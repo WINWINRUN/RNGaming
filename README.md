@@ -4,12 +4,25 @@ RNGaming is a lightweight Roblox project scaffold generator for developers build
 
 It creates Rojo-compatible starter projects so you can move quickly from a fresh idea to an editable Studio-ready codebase.
 
+## Recent changes
+
+- synced `.model.json` assets now appear immediately in Studio under `ServerStorage/TestWorldModels/SyncedModels`
+- the PNG-inspired sky-island layout is available as a real draggable model named `SkyIslandHub`
+- the runtime world generator in `server/WorldBuilder.lua` is still included for live play/testing
+- Studio helper scripts now prefer the synced model library and fall back to runtime-generated samples
+- generated projects now include `INSTALL_AND_USAGE.md` with Rojo setup and Studio placement steps
+
+For a full walkthrough, see `docs/STUDIO_SETUP.md` and `CHANGELOG.md`.
+
 ## What this does
 
 - creates a game folder structure for `server`, `client`, and `shared`
+- adds a `test` folder with synced `.model.json` assets and simple original world-model builders
+- adds a `studio` folder with plugin/command-bar helpers for quick previews
 - generates `default.project.json` for Rojo syncing
 - writes starter Lua modules for server bootstrap, client bootstrap, and shared config
 - supports multiple built-in game genres
+- includes a generated sky-island tycoon example with connected island pathing
 - produces a generated `README_GENERATED.md` in each output project
 
 ## Requirements
@@ -21,13 +34,19 @@ It creates Rojo-compatible starter projects so you can move quickly from a fresh
 ## Install
 
 1. Install Python 3.10+ from python.org.
-2. Install Rojo:
+2. Install the Rojo CLI:
 
 ```powershell
-npm install -g rojo
+winget install Rojo.Rojo
 ```
 
-3. Open this workspace in your editor.
+3. Install the Rojo Studio plugin:
+
+```powershell
+rojo plugin install
+```
+
+4. Open this workspace in your editor.
 
 ## Quickstart
 
@@ -35,6 +54,12 @@ Generate a project scaffold with the desired template:
 
 ```powershell
 python generate_game.py --game-name "MyTycoon" --template tycoon --output "./MyTycoonGame" --author "Mikey" --version "0.1" --force
+```
+
+Optional creator group metadata:
+
+```powershell
+python generate_game.py --game-name "MyTycoon" --template tycoon --output "./MyTycoonGame" --author "Mikey" --version "0.1" --group-id 846021713 --group-name "RN_Gaming" --force
 ```
 
 Open the new project folder in Roblox Studio via Rojo:
@@ -46,14 +71,16 @@ rojo serve --project default.project.json
 
 Then connect Roblox Studio to the Rojo server.
 
+For a step-by-step Studio walkthrough, see `docs/STUDIO_SETUP.md`.
+
 ## Available templates
 
 - `basic`
   - generic starter game scaffold
   - use this for any custom genre prototype
 - `tycoon`
-  - tycoon-style game with `leaderstats` and currency stubs
-  - good for economy, shop, and growth gameplay
+  - tycoon-style sky island hub with `leaderstats`, connected islands, and shop/RNG lanes
+  - good for economy, shop, RNG, and growth gameplay
 - `obstacle_course`
   - obstacle course starter with checkpoint framework
   - good for obby and parkour games
@@ -95,12 +122,19 @@ Use Codex for script generation, not place assembly.
    - `leaderstats` setup, remote events, UI actions
 4. paste Codex-generated Luau into the files under `server/` or `client/`
 5. test and iterate in Studio
+6. browse or duplicate the synced sample assets from `ServerStorage/TestWorldModels/SyncedModels`
+7. run the place if you also want runtime-generated samples in `ServerStorage/TestWorldModels/GeneratedModels`
+8. use the Studio helper in `MyTycoonGame/studio/` to clone the synced gallery or runtime test set into `Workspace`
 
 ## Customize the generated project
 
 - open `MyTycoonGame/server/MainServer.lua` and add server initialization
+- open `MyTycoonGame/server/WorldBuilder.lua` to reshape the generated sky island world
+- open `MyTycoonGame/test/ModelLibrary.lua` to add more simple Studio-ready models
+- add more synced Studio assets under `MyTycoonGame/test/SyncedModels/*.model.json`
+- use `MyTycoonGame/studio/SpawnTestModels.plugin.lua` for one-click Studio previews
+- edit `MyTycoonGame/shared/Config.lua` to point the project at your Roblox group/community
 - open `MyTycoonGame/client/MainClient.lua` and add client UI hooks
-- edit `MyTycoonGame/shared/Config.lua` for game metadata
 - add Roblox instances in Studio for UI, spawns, checkpoints, queue positions
 
 ## Testing
@@ -114,6 +148,9 @@ python test_generate_game.py
 ## Notes
 
 - This generator is a starting point, not a complete playable game.
+- `ServerStorage/TestWorldModels/SyncedModels` appears immediately after Rojo sync.
+- Run the place once after syncing to populate `ServerStorage/TestWorldModels/GeneratedModels`.
+- The `studio/` helpers are local Studio utilities and are not part of the live game build.
 - Use Roblox Studio for asset layout, part placement, UI design, and in-game testing.
 - Reuse Roblox Toolbox assets rather than modeling in Blender unless you need unique meshes.
 - If you want a new genre, generate from `basic` and add your own module logic.

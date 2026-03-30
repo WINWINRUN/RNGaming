@@ -8,6 +8,13 @@
         "ServerScriptService": {
             "$path": "server"
         },
+        "ServerStorage": {
+            "$className": "ServerStorage",
+            "TestWorldModels": {
+                "$className": "Folder",
+                "$path": "test"
+            }
+        },
         "StarterPlayer": {
             "$className": "StarterPlayer",
             "StarterPlayerScripts": {

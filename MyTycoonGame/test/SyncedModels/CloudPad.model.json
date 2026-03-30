@@ -1,0 +1,171 @@
+{
+    "ClassName": "Model",
+    "Children": [
+        {
+            "ClassName": "Part",
+            "Name": "Pad",
+            "Properties": {
+                "Anchored": true,
+                "Size": [
+                    2,
+                    18,
+                    18
+                ],
+                "Position": [
+                    0,
+                    3,
+                    0
+                ],
+                "TopSurface": "Smooth",
+                "BottomSurface": "Smooth",
+                "Material": "Neon",
+                "Color": [
+                    1.0,
+                    0.952941,
+                    0.631373
+                ],
+                "Shape": "Cylinder",
+                "Orientation": [
+                    0,
+                    0,
+                    90
+                ]
+            }
+        },
+        {
+            "ClassName": "Part",
+            "Name": "Cloud1",
+            "Properties": {
+                "Anchored": true,
+                "Size": [
+                    8,
+                    8,
+                    8
+                ],
+                "Position": [
+                    -4,
+                    2,
+                    0
+                ],
+                "TopSurface": "Smooth",
+                "BottomSurface": "Smooth",
+                "Material": "SmoothPlastic",
+                "Color": [
+                    0.956863,
+                    0.968627,
+                    1.0
+                ],
+                "Shape": "Ball",
+                "Transparency": 0.08
+            }
+        },
+        {
+            "ClassName": "Part",
+            "Name": "Cloud2",
+            "Properties": {
+                "Anchored": true,
+                "Size": [
+                    8,
+                    8,
+                    8
+                ],
+                "Position": [
+                    4,
+                    2,
+                    1
+                ],
+                "TopSurface": "Smooth",
+                "BottomSurface": "Smooth",
+                "Material": "SmoothPlastic",
+                "Color": [
+                    0.956863,
+                    0.968627,
+                    1.0
+                ],
+                "Shape": "Ball",
+                "Transparency": 0.08
+            }
+        },
+        {
+            "ClassName": "Part",
+            "Name": "Cloud3",
+            "Properties": {
+                "Anchored": true,
+                "Size": [
+                    8,
+                    8,
+                    8
+                ],
+                "Position": [
+                    0,
+                    2.5,
+                    -3
+                ],
+                "TopSurface": "Smooth",
+                "BottomSurface": "Smooth",
+                "Material": "SmoothPlastic",
+                "Color": [
+                    0.956863,
+                    0.968627,
+                    1.0
+                ],
+                "Shape": "Ball",
+                "Transparency": 0.08
+            }
+        },
+        {
+            "ClassName": "Part",
+            "Name": "Cloud4",
+            "Properties": {
+                "Anchored": true,
+                "Size": [
+                    8,
+                    8,
+                    8
+                ],
+                "Position": [
+                    0,
+                    2,
+                    4
+                ],
+                "TopSurface": "Smooth",
+                "BottomSurface": "Smooth",
+                "Material": "SmoothPlastic",
+                "Color": [
+                    0.956863,
+                    0.968627,
+                    1.0
+                ],
+                "Shape": "Ball",
+                "Transparency": 0.08
+            }
+        },
+        {
+            "ClassName": "Part",
+            "Name": "Beacon",
+            "Properties": {
+                "Anchored": true,
+                "Size": [
+                    3,
+                    3,
+                    3
+                ],
+                "Position": [
+                    0,
+                    8,
+                    0
+                ],
+                "TopSurface": "Smooth",
+                "BottomSurface": "Smooth",
+                "Material": "Neon",
+                "Color": [
+                    0.470588,
+                    0.87451,
+                    1.0
+                ],
+                "Shape": "Ball",
+                "CanCollide": false
+            }
+        }
+    ]
+}
