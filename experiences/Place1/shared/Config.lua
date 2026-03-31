@@ -1,0 +1,16 @@
+return {
+    GameName = "Place1",
+    ExperienceName = "Place1",
+    Architecture = "terrain-first-v1",
+    Author = "Mikey",
+    Version = "0.1",
+    GroupId = 846021713,
+    GroupName = "RN_Gaming",
+    ExperienceLockEnabled = false,
+    AllowedPlaceIds = {},
+    AutoGenerateOnServerStart = false,
+    DefaultTerrainProfile = "FrozenDesertMoon",
+    DefaultSeed = 515151,
+    ClearManagedRegionBeforeGenerate = true,
+    GeneratedEnvironmentFolderName = "GeneratedEnvironment",
+}

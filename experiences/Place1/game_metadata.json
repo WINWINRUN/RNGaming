@@ -1,0 +1,14 @@
+{
+    "game_name": "Place1",
+    "experience_name": "Place1",
+    "template": "terrain",
+    "author": "Mikey",
+    "version": "0.1",
+    "group_id": 846021713,
+    "group_name": "RN_Gaming",
+    "experience_lock_enabled": false,
+    "allowed_place_ids": [],
+    "default_profile": "FrozenDesertMoon",
+    "default_seed": 515151,
+    "architecture": "terrain-first-v1"
+}

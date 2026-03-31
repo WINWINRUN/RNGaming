@@ -1,0 +1,516 @@
+{
+    "DefaultProfileName": "TemperateFrontier",
+    "Profiles": {
+        "TemperateFrontier": {
+            "Name": "TemperateFrontier",
+            "DisplayName": "Temperate Frontier",
+            "Kind": "Heightmap",
+            "WorldSize": 640,
+            "CellSize": 8,
+            "ManagedCenter": {
+                "X": 0,
+                "Y": 0,
+                "Z": 0
+            },
+            "BaseY": -96,
+            "ClearMinY": -160,
+            "ClearMaxY": 260,
+            "BaseHeight": 88,
+            "HeightAmplitude": 74,
+            "DetailAmplitude": 16,
+            "RidgeAmplitude": 24,
+            "TopsoilDepth": 8,
+            "WaterLevel": 32,
+            "SnowLine": 148,
+            "Edge": {
+                "InnerRadius": 228,
+                "OuterRadius": 320,
+                "Drop": 176
+            },
+            "Noise": {
+                "ContinentalScale": 336,
+                "ContinentalOctaves": 4,
+                "DetailScale": 88,
+                "DetailOctaves": 3,
+                "RidgeScale": 176,
+                "MoistureScale": 224,
+                "Lacunarity": 2.0,
+                "Persistence": 0.5
+            },
+            "River": {
+                "Enabled": true,
+                "Scale": 156,
+                "Width": 0.14,
+                "Depth": 18
+            },
+            "Spawn": {
+                "Height": 78,
+                "InnerBlendRadius": 34,
+                "FlattenRadius": 82
+            },
+            "Props": {
+                "ScatterStride": 20,
+                "TreeDensity": 0.3,
+                "BushDensity": 0.16,
+                "RockDensity": 0.12,
+                "LandmarkDensity": 0.02
+            },
+            "Lighting": {
+                "ClockTime": 14.2,
+                "Brightness": 2.1,
+                "ExposureCompensation": 0.04,
+                "AmbientRGB": [
+                    93,
+                    106,
+                    124
+                ],
+                "OutdoorAmbientRGB": [
+                    128,
+                    151,
+                    173
+                ],
+                "AtmosphereColorRGB": [
+                    201,
+                    227,
+                    255
+                ],
+                "AtmosphereDecayRGB": [
+                    107,
+                    128,
+                    156
+                ],
+                "AtmosphereDensity": 0.32,
+                "AtmosphereOffset": 0.08,
+                "AtmosphereGlare": 0.1,
+                "AtmosphereHaze": 1.6,
+                "CloudCover": 0.34,
+                "CloudDensity": 0.28,
+                "CloudColorRGB": [
+                    255,
+                    255,
+                    255
+                ],
+                "ColorCorrectionBrightness": 0.02,
+                "ColorCorrectionContrast": 0.08,
+                "ColorCorrectionSaturation": -0.02,
+                "ColorCorrectionTintRGB": [
+                    255,
+                    249,
+                    245
+                ],
+                "EnvironmentDiffuseScale": 0.45,
+                "EnvironmentSpecularScale": 0.32
+            }
+        },
+        "DesertCanyon": {
+            "Name": "DesertCanyon",
+            "DisplayName": "Desert Canyon",
+            "Kind": "Heightmap",
+            "WorldSize": 704,
+            "CellSize": 8,
+            "ManagedCenter": {
+                "X": 0,
+                "Y": 0,
+                "Z": 0
+            },
+            "BaseY": -110,
+            "ClearMinY": -180,
+            "ClearMaxY": 280,
+            "BaseHeight": 102,
+            "HeightAmplitude": 82,
+            "DetailAmplitude": 22,
+            "RidgeAmplitude": 34,
+            "TopsoilDepth": 8,
+            "WaterLevel": -72,
+            "SnowLine": 999,
+            "Edge": {
+                "InnerRadius": 246,
+                "OuterRadius": 350,
+                "Drop": 188
+            },
+            "Noise": {
+                "ContinentalScale": 292,
+                "ContinentalOctaves": 4,
+                "DetailScale": 78,
+                "DetailOctaves": 3,
+                "RidgeScale": 132,
+                "MoistureScale": 260,
+                "Lacunarity": 2.1,
+                "Persistence": 0.47
+            },
+            "River": {
+                "Enabled": false,
+                "Scale": 180,
+                "Width": 0.1,
+                "Depth": 10
+            },
+            "Spawn": {
+                "Height": 90,
+                "InnerBlendRadius": 38,
+                "FlattenRadius": 92
+            },
+            "Props": {
+                "ScatterStride": 24,
+                "TreeDensity": 0.02,
+                "BushDensity": 0.03,
+                "RockDensity": 0.2,
+                "LandmarkDensity": 0.025
+            },
+            "Lighting": {
+                "ClockTime": 16.4,
+                "Brightness": 2.2,
+                "ExposureCompensation": 0.08,
+                "AmbientRGB": [
+                    122,
+                    112,
+                    101
+                ],
+                "OutdoorAmbientRGB": [
+                    168,
+                    149,
+                    118
+                ],
+                "AtmosphereColorRGB": [
+                    255,
+                    225,
+                    185
+                ],
+                "AtmosphereDecayRGB": [
+                    184,
+                    132,
+                    87
+                ],
+                "AtmosphereDensity": 0.38,
+                "AtmosphereOffset": 0.06,
+                "AtmosphereGlare": 0.16,
+                "AtmosphereHaze": 1.9,
+                "CloudCover": 0.14,
+                "CloudDensity": 0.16,
+                "CloudColorRGB": [
+                    255,
+                    236,
+                    214
+                ],
+                "ColorCorrectionBrightness": 0.01,
+                "ColorCorrectionContrast": 0.14,
+                "ColorCorrectionSaturation": -0.05,
+                "ColorCorrectionTintRGB": [
+                    255,
+                    240,
+                    223
+                ],
+                "EnvironmentDiffuseScale": 0.42,
+                "EnvironmentSpecularScale": 0.36
+            }
+        },
+        "FrozenDesertMoon": {
+            "Name": "FrozenDesertMoon",
+            "DisplayName": "Frozen Desert Moon",
+            "Kind": "Heightmap",
+            "WorldSize": 736,
+            "CellSize": 8,
+            "ManagedCenter": {
+                "X": 0,
+                "Y": 0,
+                "Z": 0
+            },
+            "BaseY": -124,
+            "ClearMinY": -200,
+            "ClearMaxY": 360,
+            "BaseHeight": 108,
+            "HeightAmplitude": 66,
+            "DetailAmplitude": 24,
+            "RidgeAmplitude": 22,
+            "TopsoilDepth": 10,
+            "WaterLevel": -140,
+            "SnowLine": 999,
+            "Edge": {
+                "InnerRadius": 254,
+                "OuterRadius": 368,
+                "Drop": 174
+            },
+            "Noise": {
+                "ContinentalScale": 304,
+                "ContinentalOctaves": 4,
+                "DetailScale": 92,
+                "DetailOctaves": 3,
+                "RidgeScale": 148,
+                "MoistureScale": 236,
+                "Lacunarity": 2.0,
+                "Persistence": 0.48
+            },
+            "River": {
+                "Enabled": false,
+                "Scale": 220,
+                "Width": 0.08,
+                "Depth": 8
+            },
+            "Spawn": {
+                "Height": 112,
+                "InnerBlendRadius": 40,
+                "FlattenRadius": 96
+            },
+            "Props": {
+                "ScatterStride": 22,
+                "TreeDensity": 0.0,
+                "BushDensity": 0.1,
+                "RockDensity": 0.22,
+                "LandmarkDensity": 0.03
+            },
+            "Moon": {
+                "Enabled": true,
+                "Radius": 58,
+                "Distance": 460,
+                "Height": 312,
+                "CoreColorRGB": [
+                    232,
+                    241,
+                    255
+                ],
+                "HaloColorRGB": [
+                    160,
+                    196,
+                    255
+                ]
+            },
+            "Stars": {
+                "Count": 120,
+                "Radius": 560,
+                "MinY": 238,
+                "MaxY": 420
+            },
+            "Lighting": {
+                "ClockTime": 1.8,
+                "Brightness": 1.42,
+                "ExposureCompensation": -0.08,
+                "AmbientRGB": [
+                    32,
+                    40,
+                    62
+                ],
+                "OutdoorAmbientRGB": [
+                    49,
+                    62,
+                    93
+                ],
+                "AtmosphereColorRGB": [
+                    120,
+                    144,
+                    198
+                ],
+                "AtmosphereDecayRGB": [
+                    24,
+                    29,
+                    49
+                ],
+                "AtmosphereDensity": 0.1,
+                "AtmosphereOffset": 0.02,
+                "AtmosphereGlare": 0.02,
+                "AtmosphereHaze": 0.54,
+                "CloudCover": 0.05,
+                "CloudDensity": 0.08,
+                "CloudColorRGB": [
+                    214,
+                    225,
+                    255
+                ],
+                "ColorCorrectionBrightness": -0.04,
+                "ColorCorrectionContrast": 0.2,
+                "ColorCorrectionSaturation": -0.09,
+                "ColorCorrectionTintRGB": [
+                    214,
+                    226,
+                    255
+                ],
+                "EnvironmentDiffuseScale": 0.24,
+                "EnvironmentSpecularScale": 0.38
+            }
+        },
+        "SkyArchipelago": {
+            "Name": "SkyArchipelago",
+            "DisplayName": "Sky Archipelago",
+            "Kind": "SkyIslands",
+            "WorldSize": 720,
+            "CellSize": 8,
+            "ManagedCenter": {
+                "X": 0,
+                "Y": 0,
+                "Z": 0
+            },
+            "BaseY": 20,
+            "ClearMinY": -40,
+            "ClearMaxY": 360,
+            "BaseHeight": 174,
+            "WaterLevel": -1000,
+            "TopsoilDepth": 12,
+            "IslandCount": 7,
+            "RingRadius": 186,
+            "RingJitter": 52,
+            "IslandRadius": 56,
+            "IslandRadiusJitter": 18,
+            "IslandDepth": 82,
+            "AltitudeJitter": 32,
+            "TopThickness": 18,
+            "TopBulge": 10,
+            "Spawn": {
+                "Height": 180,
+                "InnerBlendRadius": 28,
+                "FlattenRadius": 64
+            },
+            "Props": {
+                "ScatterStride": 18,
+                "TreeDensity": 0.15,
+                "BushDensity": 0.08,
+                "RockDensity": 0.1,
+                "LandmarkDensity": 0.025
+            },
+            "Lighting": {
+                "ClockTime": 11.4,
+                "Brightness": 2.3,
+                "ExposureCompensation": 0.06,
+                "AmbientRGB": [
+                    104,
+                    120,
+                    139
+                ],
+                "OutdoorAmbientRGB": [
+                    140,
+                    170,
+                    194
+                ],
+                "AtmosphereColorRGB": [
+                    214,
+                    238,
+                    255
+                ],
+                "AtmosphereDecayRGB": [
+                    138,
+                    164,
+                    193
+                ],
+                "AtmosphereDensity": 0.24,
+                "AtmosphereOffset": 0.12,
+                "AtmosphereGlare": 0.08,
+                "AtmosphereHaze": 1.2,
+                "CloudCover": 0.58,
+                "CloudDensity": 0.38,
+                "CloudColorRGB": [
+                    255,
+                    255,
+                    255
+                ],
+                "ColorCorrectionBrightness": 0.03,
+                "ColorCorrectionContrast": 0.06,
+                "ColorCorrectionSaturation": 0.01,
+                "ColorCorrectionTintRGB": [
+                    247,
+                    250,
+                    255
+                ],
+                "EnvironmentDiffuseScale": 0.48,
+                "EnvironmentSpecularScale": 0.34
+            }
+        },
+        "SpaceWaterfallCliffs": {
+            "Name": "SpaceWaterfallCliffs",
+            "DisplayName": "Space Waterfall Cliffs",
+            "Kind": "SkyIslands",
+            "WorldSize": 760,
+            "CellSize": 8,
+            "ManagedCenter": {
+                "X": 0,
+                "Y": 0,
+                "Z": 0
+            },
+            "BaseY": -120,
+            "ClearMinY": -220,
+            "ClearMaxY": 420,
+            "BaseHeight": 224,
+            "PrimaryIslandRadius": 118,
+            "PrimaryIslandAltitude": 232,
+            "WaterLevel": -1000,
+            "TopsoilDepth": 12,
+            "IslandCount": 6,
+            "RingRadius": 254,
+            "RingJitter": 34,
+            "IslandRadius": 46,
+            "IslandRadiusJitter": 12,
+            "IslandDepth": 148,
+            "AltitudeJitter": 20,
+            "TopThickness": 26,
+            "TopBulge": 16,
+            "Spawn": {
+                "Height": 236,
+                "InnerBlendRadius": 30,
+                "FlattenRadius": 72
+            },
+            "Props": {
+                "ScatterStride": 20,
+                "TreeDensity": 0.0,
+                "BushDensity": 0.0,
+                "RockDensity": 0.2,
+                "LandmarkDensity": 0.04
+            },
+            "Waterfall": {
+                "Enabled": true,
+                "EdgeOffset": 78,
+                "Height": 152,
+                "Width": 22,
+                "Thickness": 5,
+                "MistRadius": 18
+            },
+            "Stars": {
+                "Count": 96,
+                "Radius": 520,
+                "MinY": 240,
+                "MaxY": 420
+            },
+            "Lighting": {
+                "ClockTime": 2.4,
+                "Brightness": 1.75,
+                "ExposureCompensation": -0.05,
+                "AmbientRGB": [
+                    36,
+                    44,
+                    70
+                ],
+                "OutdoorAmbientRGB": [
+                    52,
+                    67,
+                    101
+                ],
+                "AtmosphereColorRGB": [
+                    99,
+                    131,
+                    188
+                ],
+                "AtmosphereDecayRGB": [
+                    21,
+                    28,
+                    53
+                ],
+                "AtmosphereDensity": 0.08,
+                "AtmosphereOffset": 0.02,
+                "AtmosphereGlare": 0.01,
+                "AtmosphereHaze": 0.45,
+                "CloudCover": 0.02,
+                "CloudDensity": 0.05,
+                "CloudColorRGB": [
+                    215,
+                    228,
+                    255
+                ],
+                "ColorCorrectionBrightness": -0.03,
+                "ColorCorrectionContrast": 0.18,
+                "ColorCorrectionSaturation": -0.08,
+                "ColorCorrectionTintRGB": [
+                    212,
+                    226,
+                    255
+                ],
+                "EnvironmentDiffuseScale": 0.22,
+                "EnvironmentSpecularScale": 0.4
+            }
+        }
+    }
+}

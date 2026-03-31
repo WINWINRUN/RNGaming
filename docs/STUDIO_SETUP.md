@@ -1,102 +1,61 @@
 # Studio Setup
 
-This guide covers installing the tooling, syncing the repo with Rojo, and placing the generated world into Roblox Studio.
+This repo now targets a terrain-first Roblox workflow.
 
-## Install
+## Install and sync
 
-1. Install Roblox Studio.
-2. Install Python 3.10 or newer.
-3. Install the Rojo CLI:
-
-```powershell
-winget install Rojo.Rojo
-```
-
-4. Install the Rojo Studio plugin:
+1. Install the Rojo CLI and the Rojo Studio plugin.
+2. Generate or open a project folder such as `MyTycoonGame`.
+3. Start Rojo from that folder:
 
 ```powershell
-rojo plugin install
+rojo serve default.project.json
 ```
 
-5. Open a fresh PowerShell window and verify:
-
-```powershell
-rojo --version
-```
-
-## Start Rojo
-
-From the generated project folder:
-
-```powershell
-cd "C:\Users\Mikey\roblox tycoon\MyTycoonGame"
-rojo serve --project default.project.json
-```
-
-Then open Roblox Studio, open the `Plugins` tab, launch Rojo, and connect to the local server.
+4. Open Roblox Studio.
+5. Open the Rojo plugin and connect to the local server.
 
 ## What syncs where
 
 - `shared/` -> `ReplicatedStorage`
 - `server/` -> `ServerScriptService`
-- `client/` -> `StarterPlayerScripts`
-- `test/` -> `ServerStorage/TestWorldModels`
+- `client/` -> `StarterPlayer/StarterPlayerScripts`
 
-## Use the synced models
+The terrain generator writes into:
 
-After Rojo connects, open `Explorer` and go to:
+- `Workspace.Terrain`
+- `Workspace/GeneratedEnvironment`
+- `Workspace/GeneratedSpawn`
 
-`ServerStorage > TestWorldModels > SyncedModels`
+## Generate terrain in Studio
 
-Use this as your local model library.
+Default behavior is conservative:
 
-To place the PNG-inspired world into the experience:
+- `AutoGenerateOnServerStart = false`
+- generation only clears the configured managed region
+- place locking can block generation in the wrong experience
 
-1. Right-click `SkyIslandHub`.
-2. Choose `Copy`.
-3. Right-click `Workspace`.
-4. Choose `Paste Into`.
+To generate terrain in edit mode:
 
-Do the same for smaller models like `FloatingPine`, `CloudPad`, or `MarketStand`.
+1. Open `View > Command Bar`.
+2. Paste `studio/GenerateTerrain.command.lua`, or install `studio/GenerateTerrain.plugin.lua` as a local Studio plugin.
+3. Run generation.
 
-Edit the copies in `Workspace`, not the source library in `ServerStorage`.
+## Experience isolation
 
-## Static world vs runtime world
+Use one project folder per experience or place workflow, then lock it with:
 
-There are two versions of the sky-island layout:
+```powershell
+python tools\lock_project_to_place.py --project ".\MyTycoonGame" --place-id 123456789
+```
 
-- `SkyIslandHub` in `ServerStorage/TestWorldModels/SyncedModels`
-  - This is the permanent draggable Studio model.
-- `server/WorldBuilder.lua`
-  - This builds the world at runtime when you press Play.
+If you reuse the same local project folder across multiple places, Rojo will still sync that same source tree to each connected place. Isolation comes from separate folders plus place locks, not from Rojo alone.
 
-If you want the structure saved into the place file, use the synced `SkyIslandHub` model in `Workspace`.
+## Review loop
 
-## Studio helper scripts
+```powershell
+python tools\review_terrain_profiles.py --project ".\MyTycoonGame"
+python tools\render_terrain_preview.py --project ".\MyTycoonGame"
+```
 
-The repo includes:
-
-- `MyTycoonGame/studio/SpawnTestModels.plugin.lua`
-- `MyTycoonGame/studio/SpawnTestModels.command.lua`
-
-These place the synced world and asset gallery into `Workspace` automatically.
-
-## Troubleshooting
-
-If the Rojo plugin does not appear:
-
-- close all Studio windows
-- reopen Studio
-- check the `Plugins` tab again
-
-If `rojo` is not recognized:
-
-- close the terminal
-- open a new terminal
-- run `rojo --version`
-
-If models are missing:
-
-- confirm you started Rojo from the project folder
-- reconnect the Rojo plugin
-- expand `ServerStorage > TestWorldModels > SyncedModels`
+If preview rendering says Pillow is missing, install it with `python -m pip install pillow`.

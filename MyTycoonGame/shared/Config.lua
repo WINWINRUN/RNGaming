@@ -1,11 +1,16 @@
-
-local Config = {
-    GameName = "MyTycoon",
-    Template = "tycoon",
+return {
+    GameName = "MyTycoonGame",
+    ExperienceName = "MyTycoonGame",
+    Architecture = "terrain-first-v1",
     Author = "Mikey",
     Version = "0.1",
     GroupId = 846021713,
     GroupName = "RN_Gaming",
+    ExperienceLockEnabled = false,
+    AllowedPlaceIds = {},
+    AutoGenerateOnServerStart = false,
+    DefaultTerrainProfile = "TemperateFrontier",
+    DefaultSeed = 1337,
+    ClearManagedRegionBeforeGenerate = true,
+    GeneratedEnvironmentFolderName = "GeneratedEnvironment",
 }
-
-return Config

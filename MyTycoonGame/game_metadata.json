@@ -1,9 +1,14 @@
 {
-    "game_name": "MyTycoon",
-    "template": "tycoon",
+    "game_name": "MyTycoonGame",
+    "experience_name": "MyTycoonGame",
+    "template": "terrain",
     "author": "Mikey",
     "version": "0.1",
     "group_id": 846021713,
     "group_name": "RN_Gaming",
-    "generated_at": "C:\\Users\\Mikey\\roblox tycoon\\MyTycoonGame"
+    "experience_lock_enabled": false,
+    "allowed_place_ids": [],
+    "default_profile": "TemperateFrontier",
+    "default_seed": 1337,
+    "architecture": "terrain-first-v1"
 }

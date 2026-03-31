@@ -1,23 +1,19 @@
 {
-    "name": "MyTycoon",
+    "name": "MyTycoonGame",
     "tree": {
         "$className": "DataModel",
         "ReplicatedStorage": {
+            "$className": "ReplicatedStorage",
             "$path": "shared"
         },
         "ServerScriptService": {
+            "$className": "ServerScriptService",
             "$path": "server"
-        },
-        "ServerStorage": {
-            "$className": "ServerStorage",
-            "TestWorldModels": {
-                "$className": "Folder",
-                "$path": "test"
-            }
         },
         "StarterPlayer": {
             "$className": "StarterPlayer",
             "StarterPlayerScripts": {
+                "$className": "StarterPlayerScripts",
                 "$path": "client"
             }
         }

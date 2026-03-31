@@ -1,0 +1,313 @@
+local TerrainProfiles = {
+    DefaultProfileName = "TemperateFrontier",
+    Profiles = {
+        TemperateFrontier = {
+            Name = "TemperateFrontier",
+            DisplayName = "Temperate Frontier",
+            Kind = "Heightmap",
+            WorldSize = 640,
+            CellSize = 8,
+            ManagedCenter = {
+                X = 0,
+                Y = 0,
+                Z = 0
+            },
+            BaseY = -96,
+            ClearMinY = -160,
+            ClearMaxY = 260,
+            BaseHeight = 88,
+            HeightAmplitude = 74,
+            DetailAmplitude = 16,
+            RidgeAmplitude = 24,
+            TopsoilDepth = 8,
+            WaterLevel = 32,
+            SnowLine = 148,
+            Edge = {
+                InnerRadius = 228,
+                OuterRadius = 320,
+                Drop = 176
+            },
+            Noise = {
+                ContinentalScale = 336,
+                ContinentalOctaves = 4,
+                DetailScale = 88,
+                DetailOctaves = 3,
+                RidgeScale = 176,
+                MoistureScale = 224,
+                Lacunarity = 2.0,
+                Persistence = 0.5
+            },
+            River = {
+                Enabled = true,
+                Scale = 156,
+                Width = 0.14,
+                Depth = 18
+            },
+            Spawn = {
+                Height = 78,
+                InnerBlendRadius = 34,
+                FlattenRadius = 82
+            },
+            Props = {
+                ScatterStride = 20,
+                TreeDensity = 0.3,
+                BushDensity = 0.16,
+                RockDensity = 0.12,
+                LandmarkDensity = 0.02
+            },
+            Lighting = {
+                ClockTime = 14.2,
+                Brightness = 2.1,
+                ExposureCompensation = 0.04,
+                AmbientRGB = {
+                    93,
+                    106,
+                    124
+                },
+                OutdoorAmbientRGB = {
+                    128,
+                    151,
+                    173
+                },
+                AtmosphereColorRGB = {
+                    201,
+                    227,
+                    255
+                },
+                AtmosphereDecayRGB = {
+                    107,
+                    128,
+                    156
+                },
+                AtmosphereDensity = 0.32,
+                AtmosphereOffset = 0.08,
+                AtmosphereGlare = 0.1,
+                AtmosphereHaze = 1.6,
+                CloudCover = 0.34,
+                CloudDensity = 0.28,
+                CloudColorRGB = {
+                    255,
+                    255,
+                    255
+                },
+                ColorCorrectionBrightness = 0.02,
+                ColorCorrectionContrast = 0.08,
+                ColorCorrectionSaturation = -0.02,
+                ColorCorrectionTintRGB = {
+                    255,
+                    249,
+                    245
+                },
+                EnvironmentDiffuseScale = 0.45,
+                EnvironmentSpecularScale = 0.32
+            }
+        },
+        DesertCanyon = {
+            Name = "DesertCanyon",
+            DisplayName = "Desert Canyon",
+            Kind = "Heightmap",
+            WorldSize = 704,
+            CellSize = 8,
+            ManagedCenter = {
+                X = 0,
+                Y = 0,
+                Z = 0
+            },
+            BaseY = -110,
+            ClearMinY = -180,
+            ClearMaxY = 280,
+            BaseHeight = 102,
+            HeightAmplitude = 82,
+            DetailAmplitude = 22,
+            RidgeAmplitude = 34,
+            TopsoilDepth = 8,
+            WaterLevel = -72,
+            SnowLine = 999,
+            Edge = {
+                InnerRadius = 246,
+                OuterRadius = 350,
+                Drop = 188
+            },
+            Noise = {
+                ContinentalScale = 292,
+                ContinentalOctaves = 4,
+                DetailScale = 78,
+                DetailOctaves = 3,
+                RidgeScale = 132,
+                MoistureScale = 260,
+                Lacunarity = 2.1,
+                Persistence = 0.47
+            },
+            River = {
+                Enabled = false,
+                Scale = 180,
+                Width = 0.1,
+                Depth = 10
+            },
+            Spawn = {
+                Height = 90,
+                InnerBlendRadius = 38,
+                FlattenRadius = 92
+            },
+            Props = {
+                ScatterStride = 24,
+                TreeDensity = 0.02,
+                BushDensity = 0.03,
+                RockDensity = 0.2,
+                LandmarkDensity = 0.025
+            },
+            Lighting = {
+                ClockTime = 16.4,
+                Brightness = 2.2,
+                ExposureCompensation = 0.08,
+                AmbientRGB = {
+                    122,
+                    112,
+                    101
+                },
+                OutdoorAmbientRGB = {
+                    168,
+                    149,
+                    118
+                },
+                AtmosphereColorRGB = {
+                    255,
+                    225,
+                    185
+                },
+                AtmosphereDecayRGB = {
+                    184,
+                    132,
+                    87
+                },
+                AtmosphereDensity = 0.38,
+                AtmosphereOffset = 0.06,
+                AtmosphereGlare = 0.16,
+                AtmosphereHaze = 1.9,
+                CloudCover = 0.14,
+                CloudDensity = 0.16,
+                CloudColorRGB = {
+                    255,
+                    236,
+                    214
+                },
+                ColorCorrectionBrightness = 0.01,
+                ColorCorrectionContrast = 0.14,
+                ColorCorrectionSaturation = -0.05,
+                ColorCorrectionTintRGB = {
+                    255,
+                    240,
+                    223
+                },
+                EnvironmentDiffuseScale = 0.42,
+                EnvironmentSpecularScale = 0.36
+            }
+        },
+        SkyArchipelago = {
+            Name = "SkyArchipelago",
+            DisplayName = "Sky Archipelago",
+            Kind = "SkyIslands",
+            WorldSize = 720,
+            CellSize = 8,
+            ManagedCenter = {
+                X = 0,
+                Y = 0,
+                Z = 0
+            },
+            BaseY = 20,
+            ClearMinY = -40,
+            ClearMaxY = 360,
+            BaseHeight = 174,
+            WaterLevel = -1000,
+            TopsoilDepth = 12,
+            IslandCount = 7,
+            RingRadius = 186,
+            RingJitter = 52,
+            IslandRadius = 56,
+            IslandRadiusJitter = 18,
+            IslandDepth = 82,
+            AltitudeJitter = 32,
+            TopThickness = 18,
+            TopBulge = 10,
+            Spawn = {
+                Height = 180,
+                InnerBlendRadius = 28,
+                FlattenRadius = 64
+            },
+            Props = {
+                ScatterStride = 18,
+                TreeDensity = 0.15,
+                BushDensity = 0.08,
+                RockDensity = 0.1,
+                LandmarkDensity = 0.025
+            },
+            Lighting = {
+                ClockTime = 11.4,
+                Brightness = 2.3,
+                ExposureCompensation = 0.06,
+                AmbientRGB = {
+                    104,
+                    120,
+                    139
+                },
+                OutdoorAmbientRGB = {
+                    140,
+                    170,
+                    194
+                },
+                AtmosphereColorRGB = {
+                    214,
+                    238,
+                    255
+                },
+                AtmosphereDecayRGB = {
+                    138,
+                    164,
+                    193
+                },
+                AtmosphereDensity = 0.24,
+                AtmosphereOffset = 0.12,
+                AtmosphereGlare = 0.08,
+                AtmosphereHaze = 1.2,
+                CloudCover = 0.58,
+                CloudDensity = 0.38,
+                CloudColorRGB = {
+                    255,
+                    255,
+                    255
+                },
+                ColorCorrectionBrightness = 0.03,
+                ColorCorrectionContrast = 0.06,
+                ColorCorrectionSaturation = 0.01,
+                ColorCorrectionTintRGB = {
+                    247,
+                    250,
+                    255
+                },
+                EnvironmentDiffuseScale = 0.48,
+                EnvironmentSpecularScale = 0.34
+            }
+        }
+    }
+}
+
+local function deepCopy(value)
+    if type(value) ~= "table" then
+        return value
+    end
+
+    local copy = {}
+    for key, item in pairs(value) do
+        copy[key] = deepCopy(item)
+    end
+    return copy
+end
+
+function TerrainProfiles.getProfile(profileName)
+    local resolvedName = profileName or TerrainProfiles.DefaultProfileName
+    local profile = TerrainProfiles.Profiles[resolvedName]
+    assert(profile, string.format("Unknown terrain profile '%s'", tostring(resolvedName)))
+    return deepCopy(profile)
+end
+
+return TerrainProfiles

@@ -1,0 +1,10 @@
+{
+    "resolution": 160,
+    "minimum_height": -109.17128777334771,
+    "maximum_height": 167.45409331876724,
+    "height_span": 276.62538109211494,
+    "water_coverage": 0.0,
+    "steep_coverage": 0.3063671875,
+    "spawn_average_height": 112.17577199130828,
+    "spawn_height_stddev": 0.6389672508806161
+}
