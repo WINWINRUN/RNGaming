@@ -1,0 +1,29 @@
+{
+  "name": "Mushroom Ruins Expanse Smooth",
+  "architecture": "prompt-smooth-world-experience-v1",
+  "runtime": "prompt-smooth-world-runtime-v1",
+  "world_style": "smooth",
+  "world_prompt": "snow world filled with giant trees and 4 giant flat top ice pillars",
+  "generation_seed": 629608950,
+  "build_output": "C:\\Users\\Mikey\\roblox tycoon\\experiences\\Mushroom Ruins Expanse Smooth\\build\\Mushroom Ruins Expanse Smooth.rbxlx",
+  "asset_log": {
+    "latest_world_log_id": 2,
+    "latest_workbook": "C:\\Users\\Mikey\\roblox tycoon\\docs\\creator_store_asset_logs\\creator_store_assets_0002_Mushroom-Ruins-Expanse-Smooth_084130E6.xlsx",
+    "latest_created_at_utc": "2026-04-07T20-27-39Z",
+    "retention_limit": 5,
+    "unique_asset_count": 1,
+    "placed_instance_count": 112,
+    "retained_workbooks": [
+      {
+        "world_log_id": 1,
+        "workbook_name": "creator_store_assets_0001_Mushroom-Ruins-Expanse-Smooth_084130E6.xlsx",
+        "created_at_utc": "2026-04-07T20-26-46Z"
+      },
+      {
+        "world_log_id": 2,
+        "workbook_name": "creator_store_assets_0002_Mushroom-Ruins-Expanse-Smooth_084130E6.xlsx",
+        "created_at_utc": "2026-04-07T20-27-39Z"
+      }
+    ]
+  }
+}

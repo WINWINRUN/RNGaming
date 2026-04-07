@@ -17,6 +17,69 @@ local function getManagedClearCenter(profile)
     return Vector3.new(center.X, y, center.Z)
 end
 
+local function getReservedZone(profile, config)
+    local flatRadius = config.TerrainReservedFlatRadius
+    if type(flatRadius) ~= "number" or flatRadius <= 0 then
+        return nil
+    end
+
+    local blendRadius = config.TerrainReservedBlendRadius
+    if type(blendRadius) ~= "number" then
+        blendRadius = math.max(profile.Spawn.FlattenRadius, 48)
+    end
+
+    return {
+        Height = profile.Spawn.Height,
+        FlatRadius = math.max(flatRadius, profile.Spawn.FlattenRadius),
+        OuterRadius = math.max(flatRadius, profile.Spawn.FlattenRadius) + math.max(blendRadius, 0),
+    }
+end
+
+local function buildClearFootprint(center, worldSize, clearMinY, clearMaxY)
+    local y = clearMinY + (clearMaxY - clearMinY) * 0.5
+    return {
+        Center = Vector3.new(center.X, y, center.Z),
+        Size = Vector3.new(worldSize, clearMaxY - clearMinY, worldSize),
+    }
+end
+
+local function getPreviousClearFootprint()
+    local worldSize = Workspace:GetAttribute("RNGamingTerrainWorldSize")
+    local clearMinY = Workspace:GetAttribute("RNGamingTerrainClearMinY")
+    local clearMaxY = Workspace:GetAttribute("RNGamingTerrainClearMaxY")
+    local centerX = Workspace:GetAttribute("RNGamingTerrainCenterX")
+    local centerY = Workspace:GetAttribute("RNGamingTerrainCenterY")
+    local centerZ = Workspace:GetAttribute("RNGamingTerrainCenterZ")
+
+    if type(worldSize) ~= "number"
+        or type(clearMinY) ~= "number"
+        or type(clearMaxY) ~= "number"
+        or type(centerX) ~= "number"
+        or type(centerY) ~= "number"
+        or type(centerZ) ~= "number" then
+        return nil
+    end
+
+    return buildClearFootprint(
+        {
+            X = centerX,
+            Y = centerY,
+            Z = centerZ,
+        },
+        worldSize,
+        clearMinY,
+        clearMaxY
+    )
+end
+
+local function clearFootprint(footprint)
+    if not footprint then
+        return
+    end
+
+    Terrain:FillBlock(CFrame.new(footprint.Center), footprint.Size, Enum.Material.Air)
+end
+
 local function createColumnSummary()
     return {
         ColumnCount = 0,
@@ -43,10 +106,11 @@ local function clearGeneratedFolder(folderName)
 end
 
 function TerrainGenerator.clearManagedRegion(profile, config)
-    local clearCenter = getManagedClearCenter(profile)
-    local size = Vector3.new(profile.WorldSize, profile.ClearMaxY - profile.ClearMinY, profile.WorldSize)
+    local currentFootprint = buildClearFootprint(profile.ManagedCenter, profile.WorldSize, profile.ClearMinY, profile.ClearMaxY)
+    local previousFootprint = getPreviousClearFootprint()
 
-    Terrain:FillBlock(CFrame.new(clearCenter), size, Enum.Material.Air)
+    clearFootprint(previousFootprint)
+    clearFootprint(currentFootprint)
     clearGeneratedFolder(config.GeneratedEnvironmentFolderName)
 
     local spawn = Workspace:FindFirstChild("GeneratedSpawn")
@@ -55,11 +119,12 @@ function TerrainGenerator.clearManagedRegion(profile, config)
     end
 end
 
-local function buildHeightmapColumns(profile, seed)
+local function buildHeightmapColumns(profile, seed, config)
     local cellSize = profile.CellSize
     local cellCount = math.floor(profile.WorldSize / cellSize)
     local halfSize = profile.WorldSize * 0.5
     local center = getManagedCenter(profile)
+    local reservedZone = getReservedZone(profile, config or {})
     local columns = {}
     local summary = createColumnSummary()
 
@@ -141,6 +206,15 @@ local function buildHeightmapColumns(profile, seed)
             )
             if distance < profile.Spawn.FlattenRadius then
                 height = Noise.lerp(profile.Spawn.Height, height, spawnAlpha)
+            end
+
+            if reservedZone and distance < reservedZone.OuterRadius then
+                local reservedAlpha = Noise.smoothstep(
+                    reservedZone.FlatRadius,
+                    reservedZone.OuterRadius,
+                    distance
+                )
+                height = Noise.lerp(reservedZone.Height, height, reservedAlpha)
             end
 
             height = math.max(height, profile.BaseY + cellSize)
@@ -314,7 +388,7 @@ function TerrainGenerator.generate(profile, seed, config, options)
         return applySkyIslands(profile, seed)
     end
 
-    local columns, summary = buildHeightmapColumns(profile, seed)
+    local columns, summary = buildHeightmapColumns(profile, seed, config)
     applyHeightmapColumns(profile, columns)
     return summary
 end

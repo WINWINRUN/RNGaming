@@ -203,6 +203,129 @@ local TerrainProfiles = {
                 EnvironmentSpecularScale = 0.36
             }
         },
+        FrozenDesertMoon = {
+            Name = "FrozenDesertMoon",
+            DisplayName = "Frozen Desert Moon",
+            Kind = "Heightmap",
+            WorldSize = 736,
+            CellSize = 8,
+            ManagedCenter = {
+                X = 0,
+                Y = 0,
+                Z = 0
+            },
+            BaseY = -124,
+            ClearMinY = -200,
+            ClearMaxY = 360,
+            BaseHeight = 108,
+            HeightAmplitude = 66,
+            DetailAmplitude = 24,
+            RidgeAmplitude = 22,
+            TopsoilDepth = 10,
+            WaterLevel = -140,
+            SnowLine = 999,
+            Edge = {
+                InnerRadius = 254,
+                OuterRadius = 368,
+                Drop = 174
+            },
+            Noise = {
+                ContinentalScale = 304,
+                ContinentalOctaves = 4,
+                DetailScale = 92,
+                DetailOctaves = 3,
+                RidgeScale = 148,
+                MoistureScale = 236,
+                Lacunarity = 2.0,
+                Persistence = 0.48
+            },
+            River = {
+                Enabled = false,
+                Scale = 220,
+                Width = 0.08,
+                Depth = 8
+            },
+            Spawn = {
+                Height = 112,
+                InnerBlendRadius = 40,
+                FlattenRadius = 96
+            },
+            Props = {
+                ScatterStride = 22,
+                TreeDensity = 0.0,
+                BushDensity = 0.1,
+                RockDensity = 0.22,
+                LandmarkDensity = 0.03
+            },
+            Moon = {
+                Enabled = true,
+                Radius = 58,
+                Distance = 460,
+                Height = 312,
+                CoreColorRGB = {
+                    232,
+                    241,
+                    255
+                },
+                HaloColorRGB = {
+                    160,
+                    196,
+                    255
+                }
+            },
+            Stars = {
+                Count = 120,
+                Radius = 560,
+                MinY = 238,
+                MaxY = 420
+            },
+            Lighting = {
+                ClockTime = 1.8,
+                Brightness = 1.42,
+                ExposureCompensation = -0.08,
+                AmbientRGB = {
+                    32,
+                    40,
+                    62
+                },
+                OutdoorAmbientRGB = {
+                    49,
+                    62,
+                    93
+                },
+                AtmosphereColorRGB = {
+                    120,
+                    144,
+                    198
+                },
+                AtmosphereDecayRGB = {
+                    24,
+                    29,
+                    49
+                },
+                AtmosphereDensity = 0.1,
+                AtmosphereOffset = 0.02,
+                AtmosphereGlare = 0.02,
+                AtmosphereHaze = 0.54,
+                CloudCover = 0.05,
+                CloudDensity = 0.08,
+                CloudColorRGB = {
+                    214,
+                    225,
+                    255
+                },
+                ColorCorrectionBrightness = -0.04,
+                ColorCorrectionContrast = 0.2,
+                ColorCorrectionSaturation = -0.09,
+                ColorCorrectionTintRGB = {
+                    214,
+                    226,
+                    255
+                },
+                EnvironmentDiffuseScale = 0.24,
+                EnvironmentSpecularScale = 0.38
+            }
+        },
         SkyArchipelago = {
             Name = "SkyArchipelago",
             DisplayName = "Sky Archipelago",
@@ -286,6 +409,107 @@ local TerrainProfiles = {
                 },
                 EnvironmentDiffuseScale = 0.48,
                 EnvironmentSpecularScale = 0.34
+            }
+        },
+        SpaceWaterfallCliffs = {
+            Name = "SpaceWaterfallCliffs",
+            DisplayName = "Space Waterfall Cliffs",
+            Kind = "SkyIslands",
+            WorldSize = 760,
+            CellSize = 8,
+            ManagedCenter = {
+                X = 0,
+                Y = 0,
+                Z = 0
+            },
+            BaseY = -120,
+            ClearMinY = -220,
+            ClearMaxY = 420,
+            BaseHeight = 224,
+            PrimaryIslandRadius = 118,
+            PrimaryIslandAltitude = 232,
+            WaterLevel = -1000,
+            TopsoilDepth = 12,
+            IslandCount = 6,
+            RingRadius = 254,
+            RingJitter = 34,
+            IslandRadius = 46,
+            IslandRadiusJitter = 12,
+            IslandDepth = 148,
+            AltitudeJitter = 20,
+            TopThickness = 26,
+            TopBulge = 16,
+            Spawn = {
+                Height = 236,
+                InnerBlendRadius = 30,
+                FlattenRadius = 72
+            },
+            Props = {
+                ScatterStride = 20,
+                TreeDensity = 0.0,
+                BushDensity = 0.0,
+                RockDensity = 0.2,
+                LandmarkDensity = 0.04
+            },
+            Waterfall = {
+                Enabled = true,
+                EdgeOffset = 78,
+                Height = 152,
+                Width = 22,
+                Thickness = 5,
+                MistRadius = 18
+            },
+            Stars = {
+                Count = 96,
+                Radius = 520,
+                MinY = 240,
+                MaxY = 420
+            },
+            Lighting = {
+                ClockTime = 2.4,
+                Brightness = 1.75,
+                ExposureCompensation = -0.05,
+                AmbientRGB = {
+                    36,
+                    44,
+                    70
+                },
+                OutdoorAmbientRGB = {
+                    52,
+                    67,
+                    101
+                },
+                AtmosphereColorRGB = {
+                    99,
+                    131,
+                    188
+                },
+                AtmosphereDecayRGB = {
+                    21,
+                    28,
+                    53
+                },
+                AtmosphereDensity = 0.08,
+                AtmosphereOffset = 0.02,
+                AtmosphereGlare = 0.01,
+                AtmosphereHaze = 0.45,
+                CloudCover = 0.02,
+                CloudDensity = 0.05,
+                CloudColorRGB = {
+                    215,
+                    228,
+                    255
+                },
+                ColorCorrectionBrightness = -0.03,
+                ColorCorrectionContrast = 0.18,
+                ColorCorrectionSaturation = -0.08,
+                ColorCorrectionTintRGB = {
+                    212,
+                    226,
+                    255
+                },
+                EnvironmentDiffuseScale = 0.22,
+                EnvironmentSpecularScale = 0.4
             }
         }
     }

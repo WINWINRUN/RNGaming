@@ -6,9 +6,22 @@
             "$className": "ReplicatedStorage",
             "$path": "shared"
         },
+        "ServerStorage": {
+            "$className": "ServerStorage",
+            "NPCs": {
+                "$className": "Folder",
+                "$path": "npcs"
+            }
+        },
         "ServerScriptService": {
             "$className": "ServerScriptService",
             "$path": "server"
+        },
+        "Workspace": {
+            "$className": "Workspace",
+            "LineMeetGame": {
+                "$path": "workspace/LineMeetGame.model.json"
+            }
         },
         "StarterPlayer": {
             "$className": "StarterPlayer",

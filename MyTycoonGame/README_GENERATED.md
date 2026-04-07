@@ -8,7 +8,9 @@ It focuses on terrain generation, environment dressing, and place isolation. Gam
 
 - `TemperateFrontier`
 - `DesertCanyon`
+- `FrozenDesertMoon`
 - `SkyArchipelago`
+- `SpaceWaterfallCliffs`
 
 ## Core folders
 

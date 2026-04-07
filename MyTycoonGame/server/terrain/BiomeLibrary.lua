@@ -14,6 +14,12 @@ local BIOMES = {
         Mesa = {Name = "Mesa", SurfaceMaterial = Enum.Material.CrackedLava, BodyMaterial = Enum.Material.Sandstone, PropStyle = "Mesa"},
         Cliff = {Name = "Cliff", SurfaceMaterial = Enum.Material.Rock, BodyMaterial = Enum.Material.Slate, PropStyle = "Cliff"},
     },
+    FrozenDesertMoon = {
+        Shore = {Name = "Shore", SurfaceMaterial = Enum.Material.Glacier, BodyMaterial = Enum.Material.Sandstone, PropStyle = "FrozenDesert"},
+        Dunes = {Name = "Dunes", SurfaceMaterial = Enum.Material.Glacier, BodyMaterial = Enum.Material.Sandstone, PropStyle = "FrozenDesert"},
+        Mesa = {Name = "Mesa", SurfaceMaterial = Enum.Material.Snow, BodyMaterial = Enum.Material.Sandstone, PropStyle = "FrozenDesert"},
+        Cliff = {Name = "Cliff", SurfaceMaterial = Enum.Material.Rock, BodyMaterial = Enum.Material.Slate, PropStyle = "Cliff"},
+    },
     SkyArchipelago = {
         Meadow = {Name = "Meadow", SurfaceMaterial = Enum.Material.Grass, BodyMaterial = Enum.Material.Ground, PropStyle = "SkyMeadow"},
         Grove = {Name = "Grove", SurfaceMaterial = Enum.Material.LeafyGrass, BodyMaterial = Enum.Material.Ground, PropStyle = "SkyGrove"},
@@ -47,7 +53,7 @@ function BiomeLibrary.resolveBiome(profile, column)
     if column.slope >= 1.1 then
         return profileBiomes.Cliff
     end
-    if profile.Name == "DesertCanyon" then
+    if profile.Name == "DesertCanyon" or profile.Name == "FrozenDesertMoon" then
         if column.height >= profile.Spawn.Height + 34 then
             return profileBiomes.Mesa
         end

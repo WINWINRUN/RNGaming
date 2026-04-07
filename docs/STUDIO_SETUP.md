@@ -29,11 +29,13 @@ The terrain generator writes into:
 
 ## Generate terrain in Studio
 
-Default behavior is conservative:
+Default behavior is now runtime-first:
 
-- `AutoGenerateOnServerStart = false`
-- generation only clears the configured managed region
-- place locking can block generation in the wrong experience
+- `AutoGenerateOnServerStart = true`
+- `TerrainSeedMode = "Fresh"`
+- generation clears the current managed region and the previous generated footprint
+- a protected gameplay zone stays clear around spawn or the build area
+- place locking can still block generation in the wrong experience
 
 To generate terrain in edit mode:
 

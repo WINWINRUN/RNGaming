@@ -1,0 +1,8 @@
+{
+  "name": "Neon Queue District",
+  "architecture": "prompt-modular-experience-v1",
+  "base_project": "ToolboxLineGame",
+  "gameplay_prompt": "40-player waiting in line game where everyone locks to one tile, earns more credits closer to the front, pays more to advance, and meets the host at the finale",
+  "world_prompt": "blocky neon sci-fi queue district with one long main route, bright checkpoints, and a front stage",
+  "build_output": "C:\\Users\\Mikey\\roblox tycoon\\experiences\\Neon-Queue-District\\build\\Neon-Queue-District.rbxlx"
+}

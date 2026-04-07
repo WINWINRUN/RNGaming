@@ -6,7 +6,7 @@ local TerrainBootstrap = require(ServerScriptService:WaitForChild("TerrainBootst
 
 local ok, result = pcall(function()
     local profileName = Config.DefaultTerrainProfile
-    local seed = Config.DefaultSeed
+    local seed = nil
     return TerrainBootstrap.generateInStudio(profileName, seed)
 end)
 

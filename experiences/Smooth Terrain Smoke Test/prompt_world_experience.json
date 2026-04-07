@@ -1,0 +1,9 @@
+{
+  "name": "Smooth Terrain Smoke Test",
+  "architecture": "prompt-smooth-world-experience-v1",
+  "runtime": "prompt-smooth-world-runtime-v1",
+  "world_style": "smooth",
+  "world_prompt": "rolling alpine valley with a crater lake, ancient stone ruins, and smooth cliffs you can walk across",
+  "generation_seed": 1297779809,
+  "build_output": "C:\\Users\\Mikey\\roblox tycoon\\experiences\\Smooth Terrain Smoke Test\\build\\Smooth Terrain Smoke Test.rbxlx"
+}

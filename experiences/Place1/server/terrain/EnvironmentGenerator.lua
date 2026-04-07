@@ -8,6 +8,22 @@ local function getManagedCenter(profile)
     return Vector3.new(center.X, center.Y, center.Z)
 end
 
+local function getReservedZone(profile, config)
+    local flatRadius = config.TerrainReservedFlatRadius
+    if type(flatRadius) ~= "number" or flatRadius <= 0 then
+        return nil
+    end
+
+    local blendRadius = config.TerrainReservedBlendRadius
+    if type(blendRadius) ~= "number" then
+        blendRadius = math.max(profile.Spawn.FlattenRadius, 48)
+    end
+
+    return {
+        OuterRadius = math.max(flatRadius, profile.Spawn.FlattenRadius) + math.max(blendRadius, 0),
+    }
+end
+
 local function getOrCreateRootFolder(folderName)
     local existing = Workspace:FindFirstChild(folderName)
     if existing then
@@ -258,9 +274,14 @@ local function buildRaycastParams(environmentRoot)
     return params
 end
 
-local function shouldSkipSpawn(profile, position)
+local function shouldSkipSpawn(profile, config, position)
     local center = getManagedCenter(profile)
     local offset = Vector3.new(position.X - center.X, 0, position.Z - center.Z)
+    local reservedZone = getReservedZone(profile, config or {})
+    if reservedZone then
+        return offset.Magnitude < (reservedZone.OuterRadius + 22)
+    end
+
     return offset.Magnitude < (profile.Spawn.FlattenRadius + 18)
 end
 
@@ -364,7 +385,7 @@ function EnvironmentGenerator.generate(profile, seed, config, options)
                 local origin = Vector3.new(x, profile.ClearMaxY - 4, z)
                 local direction = Vector3.new(0, -(profile.ClearMaxY - profile.ClearMinY + 180), 0)
                 local result = Workspace:Raycast(origin, direction, raycastParams)
-                if result and not shouldSkipSpawn(profile, result.Position) and result.Normal.Y >= 0.65 then
+                if result and not shouldSkipSpawn(profile, config, result.Position) and result.Normal.Y >= 0.65 then
                     local placed = spawnProp(profile, categories, result.Position, result.Material, randomness)
                     if placed then
                         propCount = propCount + 1

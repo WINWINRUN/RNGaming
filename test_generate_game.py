@@ -29,7 +29,7 @@ def test_generate_terrain_scaffold():
         populate_project(output_dir, metadata)
 
         assert (output_dir / "default.project.json").exists()
-        assert (output_dir / "server" / "MainServer.lua").exists()
+        assert (output_dir / "server" / "MainServer.server.lua").exists()
         assert (output_dir / "server" / "TerrainBootstrap.lua").exists()
         assert (output_dir / "server" / "terrain" / "TerrainGenerator.lua").exists()
         assert (output_dir / "server" / "terrain" / "EnvironmentGenerator.lua").exists()
@@ -41,6 +41,7 @@ def test_generate_terrain_scaffold():
         assert (output_dir / "studio" / "GenerateTerrain.plugin.lua").exists()
         assert (output_dir / "terrain_profiles.json").exists()
         assert (output_dir / "INSTALL_AND_USAGE.md").exists()
+        assert (output_dir / "client" / "MainClient.client.lua").exists()
 
         project_config = json.loads((output_dir / "default.project.json").read_text(encoding="utf-8"))
         assert project_config["tree"]["ServerScriptService"]["$path"] == "server"

@@ -32,15 +32,15 @@ You can also install `studio/GenerateTerrain.plugin.lua` as a local Studio plugi
 
 ## Runtime flow
 
-`server/MainServer.lua` loads `server/TerrainBootstrap.lua`.
+`server/MainServer.server.lua` loads `server/TerrainBootstrap.lua`.
 
 By default:
 
-- `AutoGenerateOnServerStart = false`
+- `AutoGenerateOnServerStart = true`
+- `TerrainSeedMode = "Fresh"`
 - place locks are respected
-- generation only clears the managed region for the active profile
-
-If you want runtime generation, set `AutoGenerateOnServerStart = true` in `shared/Config.lua`.
+- generation clears both the current managed region and the previous generated footprint
+- a protected zone around spawn stays clear for gameplay and building
 
 ## Experience separation
 

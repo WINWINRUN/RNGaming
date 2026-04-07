@@ -1,3 +1,4 @@
+local HttpService = game:GetService("HttpService")
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local ServerScriptService = game:GetService("ServerScriptService")
 
@@ -20,12 +21,41 @@ local function resolveProfile(profileName)
     return profile
 end
 
-local function resolveSeed(seed)
-    if seed == nil then
-        return Config.DefaultSeed
+local function generateFreshSeed()
+    local guid = HttpService:GenerateGUID(false):gsub("%-", "")
+    local head = tonumber(guid:sub(1, 8), 16)
+    if head and head > 0 then
+        return head
     end
 
-    return seed
+    local fallback = DateTime.now().UnixTimestampMillis % 2147483000
+    if fallback <= 0 then
+        fallback = 515151
+    end
+    return fallback
+end
+
+local function resolveSeed(seed, options)
+    if type(seed) == "number" then
+        return math.floor(seed)
+    end
+
+    if seed == "fresh" then
+        return generateFreshSeed()
+    end
+
+    local generationOptions = options or {}
+    local seedMode = string.lower(tostring(
+        generationOptions.SeedMode
+        or Config.TerrainSeedMode
+        or "Fixed"
+    ))
+
+    if seedMode == "fresh" or seedMode == "random" then
+        return generateFreshSeed()
+    end
+
+    return Config.DefaultSeed
 end
 
 local function assertGenerationAllowed(modeLabel)
@@ -41,8 +71,8 @@ end
 
 function TerrainBootstrap.generate(profileName, seed, options)
     local profile = resolveProfile(profileName)
-    local resolvedSeed = resolveSeed(seed)
     local generationOptions = options or {}
+    local resolvedSeed = resolveSeed(seed, generationOptions)
     local modeLabel = generationOptions.Mode or "Unknown"
 
     assertGenerationAllowed(modeLabel)
@@ -54,6 +84,15 @@ function TerrainBootstrap.generate(profileName, seed, options)
     local summary = {
         ProfileName = profile.Name,
         Seed = resolvedSeed,
+        GenerationId = HttpService:GenerateGUID(false),
+        ManagedCenter = {
+            X = profile.ManagedCenter.X,
+            Y = profile.ManagedCenter.Y,
+            Z = profile.ManagedCenter.Z,
+        },
+        WorldSize = profile.WorldSize,
+        ClearMinY = profile.ClearMinY,
+        ClearMaxY = profile.ClearMaxY,
         ColumnCount = terrainSummary.ColumnCount or 0,
         IslandCount = terrainSummary.IslandCount or 0,
         MinimumHeight = terrainSummary.MinimumHeight,
@@ -79,7 +118,7 @@ function TerrainBootstrap.start()
         return nil
     end
 
-    return TerrainBootstrap.generate(Config.DefaultTerrainProfile, Config.DefaultSeed, {
+    return TerrainBootstrap.generate(Config.DefaultTerrainProfile, nil, {
         Mode = "ServerStart",
     })
 end

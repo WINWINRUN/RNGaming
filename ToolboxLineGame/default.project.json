@@ -1,0 +1,27 @@
+{
+    "name": "ToolboxLineGame",
+    "tree": {
+        "$className": "DataModel",
+        "ReplicatedStorage": {
+            "$className": "ReplicatedStorage",
+            "$path": "shared"
+        },
+        "ServerScriptService": {
+            "$className": "ServerScriptService",
+            "$path": "server"
+        },
+        "Workspace": {
+            "$className": "Workspace",
+            "ToolboxLineGame": {
+                "$path": "workspace/ToolboxLineGame.model.json"
+            }
+        },
+        "StarterPlayer": {
+            "$className": "StarterPlayer",
+            "StarterPlayerScripts": {
+                "$className": "StarterPlayerScripts",
+                "$path": "client"
+            }
+        }
+    }
+}

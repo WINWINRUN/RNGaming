@@ -21,31 +21,38 @@ local function colorFromRGB(rgb)
     return Color3.fromRGB(rgb[1], rgb[2], rgb[3])
 end
 
+local function trySet(target, propertyName, value)
+    local ok = pcall(function()
+        target[propertyName] = value
+    end)
+    return ok
+end
+
 function LightingController.apply(profile)
     local settings = profile.Lighting
-    Lighting.Technology = Enum.Technology.Future
-    Lighting.ClockTime = settings.ClockTime
-    Lighting.Brightness = settings.Brightness
-    Lighting.ExposureCompensation = settings.ExposureCompensation
-    Lighting.Ambient = colorFromRGB(settings.AmbientRGB)
-    Lighting.OutdoorAmbient = colorFromRGB(settings.OutdoorAmbientRGB)
-    Lighting.EnvironmentDiffuseScale = settings.EnvironmentDiffuseScale
-    Lighting.EnvironmentSpecularScale = settings.EnvironmentSpecularScale
-    Lighting.GlobalShadows = true
+    trySet(Lighting, "Technology", Enum.Technology.Future)
+    trySet(Lighting, "ClockTime", settings.ClockTime)
+    trySet(Lighting, "Brightness", settings.Brightness)
+    trySet(Lighting, "ExposureCompensation", settings.ExposureCompensation)
+    trySet(Lighting, "Ambient", colorFromRGB(settings.AmbientRGB))
+    trySet(Lighting, "OutdoorAmbient", colorFromRGB(settings.OutdoorAmbientRGB))
+    trySet(Lighting, "EnvironmentDiffuseScale", settings.EnvironmentDiffuseScale)
+    trySet(Lighting, "EnvironmentSpecularScale", settings.EnvironmentSpecularScale)
+    trySet(Lighting, "GlobalShadows", true)
 
     local atmosphere = ensureChild(Lighting, "Atmosphere", "GeneratedAtmosphere")
-    atmosphere.Color = colorFromRGB(settings.AtmosphereColorRGB)
-    atmosphere.Decay = colorFromRGB(settings.AtmosphereDecayRGB)
-    atmosphere.Density = settings.AtmosphereDensity
-    atmosphere.Offset = settings.AtmosphereOffset
-    atmosphere.Glare = settings.AtmosphereGlare
-    atmosphere.Haze = settings.AtmosphereHaze
+    trySet(atmosphere, "Color", colorFromRGB(settings.AtmosphereColorRGB))
+    trySet(atmosphere, "Decay", colorFromRGB(settings.AtmosphereDecayRGB))
+    trySet(atmosphere, "Density", settings.AtmosphereDensity)
+    trySet(atmosphere, "Offset", settings.AtmosphereOffset)
+    trySet(atmosphere, "Glare", settings.AtmosphereGlare)
+    trySet(atmosphere, "Haze", settings.AtmosphereHaze)
 
     local colorCorrection = ensureChild(Lighting, "ColorCorrectionEffect", "GeneratedColorCorrection")
-    colorCorrection.Brightness = settings.ColorCorrectionBrightness
-    colorCorrection.Contrast = settings.ColorCorrectionContrast
-    colorCorrection.Saturation = settings.ColorCorrectionSaturation
-    colorCorrection.TintColor = colorFromRGB(settings.ColorCorrectionTintRGB)
+    trySet(colorCorrection, "Brightness", settings.ColorCorrectionBrightness)
+    trySet(colorCorrection, "Contrast", settings.ColorCorrectionContrast)
+    trySet(colorCorrection, "Saturation", settings.ColorCorrectionSaturation)
+    trySet(colorCorrection, "TintColor", colorFromRGB(settings.ColorCorrectionTintRGB))
 
     local terrain = Workspace.Terrain
     local clouds = terrain:FindFirstChild("GeneratedClouds")
@@ -58,9 +65,9 @@ function LightingController.apply(profile)
         clouds.Name = "GeneratedClouds"
         clouds.Parent = terrain
     end
-    clouds.Cover = settings.CloudCover
-    clouds.Density = settings.CloudDensity
-    clouds.Color = colorFromRGB(settings.CloudColorRGB)
+    trySet(clouds, "Cover", settings.CloudCover)
+    trySet(clouds, "Density", settings.CloudDensity)
+    trySet(clouds, "Color", colorFromRGB(settings.CloudColorRGB))
 end
 
 return LightingController

@@ -6,6 +6,7 @@ Place1 uses a terrain-first architecture:
 - the generator writes into a managed region instead of clearing the entire place
 - environment props are built from primitive parts with no embedded scripts
 - terrain profile previews are generated locally with Python tooling
+- NPC definitions live in a separate `npcs/` folder and shop logic stays in `server/`
 
 ## Install
 
@@ -29,6 +30,16 @@ Recommended edit-time flow:
 4. Review the generated world in Studio and save the place when you are happy with it.
 
 You can also install `studio/GenerateTerrain.plugin.lua` as a local Studio plugin and use its toolbar buttons for generate, regenerate, and clear.
+
+## Create the shop NPC in Studio
+
+1. Start Rojo for `Place1` and connect Studio.
+2. Open `View > Command Bar`.
+3. Paste `studio/CreateShopNpc.command.lua`.
+4. Press Enter.
+5. A `SeleneVendorStall` model will be created in `Workspace.VendorStalls`.
+
+When you press Play, the vendor stands will sell tools for `MoonCredits`.
 
 ## Runtime flow
 
@@ -63,3 +74,4 @@ If preview rendering says Pillow is missing, install it with `python -m pip inst
 - change the default profile in `shared/Config.lua`
 - tune generation settings in `shared/TerrainProfiles.lua`
 - keep `terrain_profiles.json` in sync by regenerating the project from the repo root
+- keep NPC inventory data in `npcs/NpcCatalog.lua`

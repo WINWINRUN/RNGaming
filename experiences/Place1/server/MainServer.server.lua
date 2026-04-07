@@ -4,6 +4,10 @@ local ServerScriptService = game:GetService("ServerScriptService")
 local Config = require(ReplicatedStorage:WaitForChild("Config"))
 local ExperienceGuard = require(ReplicatedStorage:WaitForChild("ExperienceGuard"))
 local TerrainBootstrap = require(ServerScriptService:WaitForChild("TerrainBootstrap"))
+local WalletService = require(ServerScriptService:WaitForChild("WalletService"))
+local NpcShopService = require(ServerScriptService:WaitForChild("NpcShopService"))
+local TycoonService = require(ServerScriptService:WaitForChild("TycoonService"))
+local LineMeetGameService = require(ServerScriptService:WaitForChild("LineMeetGameService"))
 
 if not ExperienceGuard.canRunHere(Config) then
     warn("[RNGaming] Terrain generation skipped because this place is not allowed by Config.lua")
@@ -23,4 +27,18 @@ if result then
     print(string.format("[RNGaming] Terrain ready with profile %s and seed %s", result.ProfileName, tostring(result.Seed)))
 else
     print("[RNGaming] Terrain scaffold loaded. AutoGenerateOnServerStart is disabled.")
+end
+
+WalletService.start()
+
+if Config.EnableNpcShop then
+    NpcShopService.start()
+end
+
+if Config.EnableTycoon then
+    TycoonService.start()
+end
+
+if Config.EnableLineMeetGame then
+    LineMeetGameService.start()
 end

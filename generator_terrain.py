@@ -512,15 +512,15 @@ PROJECT_INSTALL_AND_USAGE = textwrap.dedent(
 
     ## Runtime flow
 
-    `server/MainServer.lua` loads `server/TerrainBootstrap.lua`.
+    `server/MainServer.server.lua` loads `server/TerrainBootstrap.lua`.
 
     By default:
 
-    - `AutoGenerateOnServerStart = false`
+    - `AutoGenerateOnServerStart = true`
+    - `TerrainSeedMode = "Fresh"`
     - place locks are respected
-    - generation only clears the managed region for the active profile
-
-    If you want runtime generation, set `AutoGenerateOnServerStart = true` in `shared/Config.lua`.
+    - generation clears both the current managed region and the previous generated footprint
+    - a protected zone around spawn stays clear for gameplay and building
 
     ## Experience separation
 
@@ -630,11 +630,14 @@ def render_config_lua(metadata: dict) -> str:
             GroupName = __GROUP_NAME__,
             ExperienceLockEnabled = __EXPERIENCE_LOCK_ENABLED__,
             AllowedPlaceIds = __ALLOWED_PLACE_IDS__,
-            AutoGenerateOnServerStart = false,
+            AutoGenerateOnServerStart = true,
             DefaultTerrainProfile = __DEFAULT_PROFILE__,
             DefaultSeed = __DEFAULT_SEED__,
+            TerrainSeedMode = "Fresh",
             ClearManagedRegionBeforeGenerate = true,
             GeneratedEnvironmentFolderName = "GeneratedEnvironment",
+            TerrainReservedFlatRadius = 220,
+            TerrainReservedBlendRadius = 56,
         }
         """
     ).strip()
@@ -727,7 +730,7 @@ def reset_output_dir(output_dir: Path) -> None:
 
 TEXT_FILES.update(
     {
-        "server/MainServer.lua": textwrap.dedent(
+        "server/MainServer.server.lua": textwrap.dedent(
             """
             local ReplicatedStorage = game:GetService("ReplicatedStorage")
             local ServerScriptService = game:GetService("ServerScriptService")
@@ -760,6 +763,7 @@ TEXT_FILES.update(
         + "\n",
         "server/TerrainBootstrap.lua": textwrap.dedent(
             """
+            local HttpService = game:GetService("HttpService")
             local ReplicatedStorage = game:GetService("ReplicatedStorage")
             local ServerScriptService = game:GetService("ServerScriptService")
 
@@ -782,12 +786,41 @@ TEXT_FILES.update(
                 return profile
             end
 
-            local function resolveSeed(seed)
-                if seed == nil then
-                    return Config.DefaultSeed
+            local function generateFreshSeed()
+                local guid = HttpService:GenerateGUID(false):gsub("%-", "")
+                local head = tonumber(guid:sub(1, 8), 16)
+                if head and head > 0 then
+                    return head
                 end
 
-                return seed
+                local fallback = DateTime.now().UnixTimestampMillis % 2147483000
+                if fallback <= 0 then
+                    fallback = 515151
+                end
+                return fallback
+            end
+
+            local function resolveSeed(seed, options)
+                if type(seed) == "number" then
+                    return math.floor(seed)
+                end
+
+                if seed == "fresh" then
+                    return generateFreshSeed()
+                end
+
+                local generationOptions = options or {}
+                local seedMode = string.lower(tostring(
+                    generationOptions.SeedMode
+                    or Config.TerrainSeedMode
+                    or "Fixed"
+                ))
+
+                if seedMode == "fresh" or seedMode == "random" then
+                    return generateFreshSeed()
+                end
+
+                return Config.DefaultSeed
             end
 
             local function assertGenerationAllowed(modeLabel)
@@ -803,8 +836,8 @@ TEXT_FILES.update(
 
             function TerrainBootstrap.generate(profileName, seed, options)
                 local profile = resolveProfile(profileName)
-                local resolvedSeed = resolveSeed(seed)
                 local generationOptions = options or {}
+                local resolvedSeed = resolveSeed(seed, generationOptions)
                 local modeLabel = generationOptions.Mode or "Unknown"
 
                 assertGenerationAllowed(modeLabel)
@@ -816,6 +849,15 @@ TEXT_FILES.update(
                 local summary = {
                     ProfileName = profile.Name,
                     Seed = resolvedSeed,
+                    GenerationId = HttpService:GenerateGUID(false),
+                    ManagedCenter = {
+                        X = profile.ManagedCenter.X,
+                        Y = profile.ManagedCenter.Y,
+                        Z = profile.ManagedCenter.Z,
+                    },
+                    WorldSize = profile.WorldSize,
+                    ClearMinY = profile.ClearMinY,
+                    ClearMaxY = profile.ClearMaxY,
                     ColumnCount = terrainSummary.ColumnCount or 0,
                     IslandCount = terrainSummary.IslandCount or 0,
                     MinimumHeight = terrainSummary.MinimumHeight,
@@ -841,7 +883,7 @@ TEXT_FILES.update(
                     return nil
                 end
 
-                return TerrainBootstrap.generate(Config.DefaultTerrainProfile, Config.DefaultSeed, {
+                return TerrainBootstrap.generate(Config.DefaultTerrainProfile, nil, {
                     Mode = "ServerStart",
                 })
             end
@@ -1054,6 +1096,69 @@ TEXT_FILES.update(
                 return Vector3.new(center.X, y, center.Z)
             end
 
+            local function getReservedZone(profile, config)
+                local flatRadius = config.TerrainReservedFlatRadius
+                if type(flatRadius) ~= "number" or flatRadius <= 0 then
+                    return nil
+                end
+
+                local blendRadius = config.TerrainReservedBlendRadius
+                if type(blendRadius) ~= "number" then
+                    blendRadius = math.max(profile.Spawn.FlattenRadius, 48)
+                end
+
+                return {
+                    Height = profile.Spawn.Height,
+                    FlatRadius = math.max(flatRadius, profile.Spawn.FlattenRadius),
+                    OuterRadius = math.max(flatRadius, profile.Spawn.FlattenRadius) + math.max(blendRadius, 0),
+                }
+            end
+
+            local function buildClearFootprint(center, worldSize, clearMinY, clearMaxY)
+                local y = clearMinY + (clearMaxY - clearMinY) * 0.5
+                return {
+                    Center = Vector3.new(center.X, y, center.Z),
+                    Size = Vector3.new(worldSize, clearMaxY - clearMinY, worldSize),
+                }
+            end
+
+            local function getPreviousClearFootprint()
+                local worldSize = Workspace:GetAttribute("RNGamingTerrainWorldSize")
+                local clearMinY = Workspace:GetAttribute("RNGamingTerrainClearMinY")
+                local clearMaxY = Workspace:GetAttribute("RNGamingTerrainClearMaxY")
+                local centerX = Workspace:GetAttribute("RNGamingTerrainCenterX")
+                local centerY = Workspace:GetAttribute("RNGamingTerrainCenterY")
+                local centerZ = Workspace:GetAttribute("RNGamingTerrainCenterZ")
+
+                if type(worldSize) ~= "number"
+                    or type(clearMinY) ~= "number"
+                    or type(clearMaxY) ~= "number"
+                    or type(centerX) ~= "number"
+                    or type(centerY) ~= "number"
+                    or type(centerZ) ~= "number" then
+                    return nil
+                end
+
+                return buildClearFootprint(
+                    {
+                        X = centerX,
+                        Y = centerY,
+                        Z = centerZ,
+                    },
+                    worldSize,
+                    clearMinY,
+                    clearMaxY
+                )
+            end
+
+            local function clearFootprint(footprint)
+                if not footprint then
+                    return
+                end
+
+                Terrain:FillBlock(CFrame.new(footprint.Center), footprint.Size, Enum.Material.Air)
+            end
+
             local function createColumnSummary()
                 return {
                     ColumnCount = 0,
@@ -1080,10 +1185,11 @@ TEXT_FILES.update(
             end
 
             function TerrainGenerator.clearManagedRegion(profile, config)
-                local clearCenter = getManagedClearCenter(profile)
-                local size = Vector3.new(profile.WorldSize, profile.ClearMaxY - profile.ClearMinY, profile.WorldSize)
+                local currentFootprint = buildClearFootprint(profile.ManagedCenter, profile.WorldSize, profile.ClearMinY, profile.ClearMaxY)
+                local previousFootprint = getPreviousClearFootprint()
 
-                Terrain:FillBlock(CFrame.new(clearCenter), size, Enum.Material.Air)
+                clearFootprint(previousFootprint)
+                clearFootprint(currentFootprint)
                 clearGeneratedFolder(config.GeneratedEnvironmentFolderName)
 
                 local spawn = Workspace:FindFirstChild("GeneratedSpawn")
@@ -1092,11 +1198,12 @@ TEXT_FILES.update(
                 end
             end
 
-            local function buildHeightmapColumns(profile, seed)
+            local function buildHeightmapColumns(profile, seed, config)
                 local cellSize = profile.CellSize
                 local cellCount = math.floor(profile.WorldSize / cellSize)
                 local halfSize = profile.WorldSize * 0.5
                 local center = getManagedCenter(profile)
+                local reservedZone = getReservedZone(profile, config or {})
                 local columns = {}
                 local summary = createColumnSummary()
 
@@ -1178,6 +1285,15 @@ TEXT_FILES.update(
                         )
                         if distance < profile.Spawn.FlattenRadius then
                             height = Noise.lerp(profile.Spawn.Height, height, spawnAlpha)
+                        end
+
+                        if reservedZone and distance < reservedZone.OuterRadius then
+                            local reservedAlpha = Noise.smoothstep(
+                                reservedZone.FlatRadius,
+                                reservedZone.OuterRadius,
+                                distance
+                            )
+                            height = Noise.lerp(reservedZone.Height, height, reservedAlpha)
                         end
 
                         height = math.max(height, profile.BaseY + cellSize)
@@ -1351,7 +1467,7 @@ TEXT_FILES.update(
                     return applySkyIslands(profile, seed)
                 end
 
-                local columns, summary = buildHeightmapColumns(profile, seed)
+                local columns, summary = buildHeightmapColumns(profile, seed, config)
                 applyHeightmapColumns(profile, columns)
                 return summary
             end
@@ -1375,6 +1491,22 @@ TEXT_FILES.update(
             local function getManagedCenter(profile)
                 local center = profile.ManagedCenter
                 return Vector3.new(center.X, center.Y, center.Z)
+            end
+
+            local function getReservedZone(profile, config)
+                local flatRadius = config.TerrainReservedFlatRadius
+                if type(flatRadius) ~= "number" or flatRadius <= 0 then
+                    return nil
+                end
+
+                local blendRadius = config.TerrainReservedBlendRadius
+                if type(blendRadius) ~= "number" then
+                    blendRadius = math.max(profile.Spawn.FlattenRadius, 48)
+                end
+
+                return {
+                    OuterRadius = math.max(flatRadius, profile.Spawn.FlattenRadius) + math.max(blendRadius, 0),
+                }
             end
 
             local function getOrCreateRootFolder(folderName)
@@ -1627,9 +1759,14 @@ TEXT_FILES.update(
                 return params
             end
 
-            local function shouldSkipSpawn(profile, position)
+            local function shouldSkipSpawn(profile, config, position)
                 local center = getManagedCenter(profile)
                 local offset = Vector3.new(position.X - center.X, 0, position.Z - center.Z)
+                local reservedZone = getReservedZone(profile, config or {})
+                if reservedZone then
+                    return offset.Magnitude < (reservedZone.OuterRadius + 22)
+                end
+
                 return offset.Magnitude < (profile.Spawn.FlattenRadius + 18)
             end
 
@@ -1733,7 +1870,7 @@ TEXT_FILES.update(
                             local origin = Vector3.new(x, profile.ClearMaxY - 4, z)
                             local direction = Vector3.new(0, -(profile.ClearMaxY - profile.ClearMinY + 180), 0)
                             local result = Workspace:Raycast(origin, direction, raycastParams)
-                            if result and not shouldSkipSpawn(profile, result.Position) and result.Normal.Y >= 0.65 then
+                            if result and not shouldSkipSpawn(profile, config, result.Position) and result.Normal.Y >= 0.65 then
                                 local placed = spawnProp(profile, categories, result.Position, result.Material, randomness)
                                 if placed then
                                     propCount = propCount + 1
@@ -1776,31 +1913,38 @@ TEXT_FILES.update(
                 return Color3.fromRGB(rgb[1], rgb[2], rgb[3])
             end
 
+            local function trySet(target, propertyName, value)
+                local ok = pcall(function()
+                    target[propertyName] = value
+                end)
+                return ok
+            end
+
             function LightingController.apply(profile)
                 local settings = profile.Lighting
-                Lighting.Technology = Enum.Technology.Future
-                Lighting.ClockTime = settings.ClockTime
-                Lighting.Brightness = settings.Brightness
-                Lighting.ExposureCompensation = settings.ExposureCompensation
-                Lighting.Ambient = colorFromRGB(settings.AmbientRGB)
-                Lighting.OutdoorAmbient = colorFromRGB(settings.OutdoorAmbientRGB)
-                Lighting.EnvironmentDiffuseScale = settings.EnvironmentDiffuseScale
-                Lighting.EnvironmentSpecularScale = settings.EnvironmentSpecularScale
-                Lighting.GlobalShadows = true
+                trySet(Lighting, "Technology", Enum.Technology.Future)
+                trySet(Lighting, "ClockTime", settings.ClockTime)
+                trySet(Lighting, "Brightness", settings.Brightness)
+                trySet(Lighting, "ExposureCompensation", settings.ExposureCompensation)
+                trySet(Lighting, "Ambient", colorFromRGB(settings.AmbientRGB))
+                trySet(Lighting, "OutdoorAmbient", colorFromRGB(settings.OutdoorAmbientRGB))
+                trySet(Lighting, "EnvironmentDiffuseScale", settings.EnvironmentDiffuseScale)
+                trySet(Lighting, "EnvironmentSpecularScale", settings.EnvironmentSpecularScale)
+                trySet(Lighting, "GlobalShadows", true)
 
                 local atmosphere = ensureChild(Lighting, "Atmosphere", "GeneratedAtmosphere")
-                atmosphere.Color = colorFromRGB(settings.AtmosphereColorRGB)
-                atmosphere.Decay = colorFromRGB(settings.AtmosphereDecayRGB)
-                atmosphere.Density = settings.AtmosphereDensity
-                atmosphere.Offset = settings.AtmosphereOffset
-                atmosphere.Glare = settings.AtmosphereGlare
-                atmosphere.Haze = settings.AtmosphereHaze
+                trySet(atmosphere, "Color", colorFromRGB(settings.AtmosphereColorRGB))
+                trySet(atmosphere, "Decay", colorFromRGB(settings.AtmosphereDecayRGB))
+                trySet(atmosphere, "Density", settings.AtmosphereDensity)
+                trySet(atmosphere, "Offset", settings.AtmosphereOffset)
+                trySet(atmosphere, "Glare", settings.AtmosphereGlare)
+                trySet(atmosphere, "Haze", settings.AtmosphereHaze)
 
                 local colorCorrection = ensureChild(Lighting, "ColorCorrectionEffect", "GeneratedColorCorrection")
-                colorCorrection.Brightness = settings.ColorCorrectionBrightness
-                colorCorrection.Contrast = settings.ColorCorrectionContrast
-                colorCorrection.Saturation = settings.ColorCorrectionSaturation
-                colorCorrection.TintColor = colorFromRGB(settings.ColorCorrectionTintRGB)
+                trySet(colorCorrection, "Brightness", settings.ColorCorrectionBrightness)
+                trySet(colorCorrection, "Contrast", settings.ColorCorrectionContrast)
+                trySet(colorCorrection, "Saturation", settings.ColorCorrectionSaturation)
+                trySet(colorCorrection, "TintColor", colorFromRGB(settings.ColorCorrectionTintRGB))
 
                 local terrain = Workspace.Terrain
                 local clouds = terrain:FindFirstChild("GeneratedClouds")
@@ -1813,9 +1957,9 @@ TEXT_FILES.update(
                     clouds.Name = "GeneratedClouds"
                     clouds.Parent = terrain
                 end
-                clouds.Cover = settings.CloudCover
-                clouds.Density = settings.CloudDensity
-                clouds.Color = colorFromRGB(settings.CloudColorRGB)
+                trySet(clouds, "Cover", settings.CloudCover)
+                trySet(clouds, "Density", settings.CloudDensity)
+                trySet(clouds, "Color", colorFromRGB(settings.CloudColorRGB))
             end
 
             return LightingController
@@ -1887,13 +2031,27 @@ TEXT_FILES.update(
                 Workspace:SetAttribute("RNGamingTerrainProfile", summary.ProfileName)
                 Workspace:SetAttribute("RNGamingTerrainSeed", summary.Seed)
                 Workspace:SetAttribute("RNGamingTerrainPropCount", summary.PropCount or 0)
+                Workspace:SetAttribute("RNGamingTerrainGenerationId", summary.GenerationId)
+                Workspace:SetAttribute("RNGamingTerrainCenterX", summary.ManagedCenter and summary.ManagedCenter.X or nil)
+                Workspace:SetAttribute("RNGamingTerrainCenterY", summary.ManagedCenter and summary.ManagedCenter.Y or nil)
+                Workspace:SetAttribute("RNGamingTerrainCenterZ", summary.ManagedCenter and summary.ManagedCenter.Z or nil)
+                Workspace:SetAttribute("RNGamingTerrainWorldSize", summary.WorldSize)
+                Workspace:SetAttribute("RNGamingTerrainClearMinY", summary.ClearMinY)
+                Workspace:SetAttribute("RNGamingTerrainClearMaxY", summary.ClearMaxY)
 
                 local folder = getOrCreateFolder()
                 addValue(folder, "StringValue", "ProfileName", summary.ProfileName)
                 addValue(folder, "IntValue", "Seed", summary.Seed)
+                addValue(folder, "StringValue", "GenerationId", summary.GenerationId or "")
                 addValue(folder, "IntValue", "ColumnCount", summary.ColumnCount or 0)
                 addValue(folder, "IntValue", "IslandCount", summary.IslandCount or 0)
                 addValue(folder, "IntValue", "PropCount", summary.PropCount or 0)
+                addValue(folder, "NumberValue", "CenterX", summary.ManagedCenter and summary.ManagedCenter.X or 0)
+                addValue(folder, "NumberValue", "CenterY", summary.ManagedCenter and summary.ManagedCenter.Y or 0)
+                addValue(folder, "NumberValue", "CenterZ", summary.ManagedCenter and summary.ManagedCenter.Z or 0)
+                addValue(folder, "NumberValue", "WorldSize", summary.WorldSize or 0)
+                addValue(folder, "NumberValue", "ClearMinY", summary.ClearMinY or 0)
+                addValue(folder, "NumberValue", "ClearMaxY", summary.ClearMaxY or 0)
                 addValue(folder, "NumberValue", "MinimumHeight", summary.MinimumHeight or 0)
                 addValue(folder, "NumberValue", "MaximumHeight", summary.MaximumHeight or 0)
                 addValue(folder, "NumberValue", "WaterCoverage", summary.WaterCoverage or 0)
@@ -1904,6 +2062,13 @@ TEXT_FILES.update(
                 Workspace:SetAttribute("RNGamingTerrainProfile", nil)
                 Workspace:SetAttribute("RNGamingTerrainSeed", nil)
                 Workspace:SetAttribute("RNGamingTerrainPropCount", nil)
+                Workspace:SetAttribute("RNGamingTerrainGenerationId", nil)
+                Workspace:SetAttribute("RNGamingTerrainCenterX", nil)
+                Workspace:SetAttribute("RNGamingTerrainCenterY", nil)
+                Workspace:SetAttribute("RNGamingTerrainCenterZ", nil)
+                Workspace:SetAttribute("RNGamingTerrainWorldSize", nil)
+                Workspace:SetAttribute("RNGamingTerrainClearMinY", nil)
+                Workspace:SetAttribute("RNGamingTerrainClearMaxY", nil)
                 local folder = Workspace:FindFirstChild("GeneratedTerrainInfo")
                 if folder then
                     folder:Destroy()
@@ -1914,7 +2079,7 @@ TEXT_FILES.update(
             """
         ).strip()
         + "\n",
-        "client/MainClient.lua": textwrap.dedent(
+        "client/MainClient.client.lua": textwrap.dedent(
             """
             local Workspace = game:GetService("Workspace")
 
@@ -1941,7 +2106,7 @@ TEXT_FILES.update(
 
             local ok, result = pcall(function()
                 local profileName = Config.DefaultTerrainProfile
-                local seed = Config.DefaultSeed
+                local seed = nil
                 return TerrainBootstrap.generateInStudio(profileName, seed)
             end)
 
@@ -1976,7 +2141,7 @@ TEXT_FILES.update(
             generateButton.Click:Connect(function()
                 local ok, result = pcall(function()
                     withBootstrap(function(TerrainBootstrap, Config)
-                        local summary = TerrainBootstrap.generateInStudio(Config.DefaultTerrainProfile, Config.DefaultSeed)
+                        local summary = TerrainBootstrap.generateInStudio(Config.DefaultTerrainProfile, nil)
                         print(string.format("[RNGaming] Generated %s with seed %s", summary.ProfileName, tostring(summary.Seed)))
                     end)
                 end)
@@ -1988,7 +2153,7 @@ TEXT_FILES.update(
             randomizeButton.Click:Connect(function()
                 local ok, result = pcall(function()
                     withBootstrap(function(TerrainBootstrap, Config)
-                        local seed = math.floor(os.time() % 1000000)
+                        local seed = "fresh"
                         local summary = TerrainBootstrap.generateInStudio(Config.DefaultTerrainProfile, seed)
                         print(string.format("[RNGaming] Generated %s with new seed %s", summary.ProfileName, tostring(summary.Seed)))
                     end)

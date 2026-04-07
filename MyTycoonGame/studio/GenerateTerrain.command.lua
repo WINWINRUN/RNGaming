@@ -5,8 +5,8 @@ local Config = require(ReplicatedStorage:WaitForChild("Config"))
 local TerrainBootstrap = require(ServerScriptService:WaitForChild("TerrainBootstrap"))
 
 local ok, result = pcall(function()
-    local profileName = Config.DefaultTerrainProfile
-    local seed = Config.DefaultSeed
+    local profileName = nil
+    local seed = nil
     return TerrainBootstrap.generateInStudio(profileName, seed)
 end)
 

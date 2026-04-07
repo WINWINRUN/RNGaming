@@ -1,0 +1,144 @@
+{
+  "prompt": "blocky sci-fi outpost with one main road, cramped side alleys, a big landing pad, and low detail",
+  "explicit_config": {
+    "theme": {
+      "value": "sci-fi",
+      "evidence": "sci-fi"
+    },
+    "art_style": {
+      "value": "blocky",
+      "evidence": "blocky"
+    },
+    "layout": {
+      "value": "main-road",
+      "evidence": "main road"
+    },
+    "density": {
+      "value": "dense",
+      "evidence": "cramped"
+    },
+    "detail": {
+      "value": "low",
+      "evidence": "low detail"
+    },
+    "main_route_count": {
+      "value": 1,
+      "evidence": "one main road"
+    },
+    "landmarks": {
+      "value": [
+        "landing_pad"
+      ],
+      "evidence": "landing pad"
+    }
+  },
+  "filled_gaps": {
+    "terrain": "flat",
+    "scale": "medium",
+    "mood": "bright",
+    "gameplay_focus": "exploration",
+    "district_count": 3,
+    "module_count": 36,
+    "side_route_count": 2,
+    "landmark_count": 3,
+    "grid_size": 24,
+    "height_step": 12,
+    "color_story": [
+      "steel",
+      "off-white",
+      "safety orange"
+    ],
+    "boundary_style": "service walls and canyon berms",
+    "spawn_anchor": "airlock checkpoint",
+    "objective_anchor": "main landing pad",
+    "module_families": [
+      "road",
+      "service_alley",
+      "hangar",
+      "utility_room",
+      "tower",
+      "pad"
+    ],
+    "navigation_pattern": "discover side paths and return to landmarks",
+    "prop_budget": "light prop pass",
+    "open_space_ratio": 0.2
+  },
+  "world_spec": {
+    "theme": "sci-fi",
+    "art_style": "blocky",
+    "terrain": "flat",
+    "layout": "main-road",
+    "density": "dense",
+    "detail": "low",
+    "scale": "medium",
+    "mood": "bright",
+    "gameplay_focus": "exploration",
+    "district_count": 3,
+    "module_count": 36,
+    "main_route_count": 1,
+    "side_route_count": 2,
+    "landmark_count": 3,
+    "grid_size": 24,
+    "height_step": 12,
+    "color_story": [
+      "steel",
+      "off-white",
+      "safety orange"
+    ],
+    "boundary_style": "service walls and canyon berms",
+    "spawn_anchor": "airlock checkpoint",
+    "objective_anchor": "main landing pad",
+    "module_families": [
+      "road",
+      "service_alley",
+      "hangar",
+      "utility_room",
+      "tower",
+      "pad"
+    ],
+    "navigation_pattern": "discover side paths and return to landmarks",
+    "prop_budget": "light prop pass",
+    "open_space_ratio": 0.2,
+    "validation_rules": [
+      "Every path connector must terminate in a compatible connector.",
+      "Every landmark must be reachable from spawn in under three route changes.",
+      "No module should float or overlap after snap placement.",
+      "Primary route must keep landmark sightlines at regular intervals.",
+      "Gameplay-critical anchors must stay readable even in low-detail mode."
+    ],
+    "source_prompt": "blocky sci-fi outpost with one main road, cramped side alleys, a big landing pad, and low detail",
+    "landmarks": [
+      "landing_pad"
+    ]
+  },
+  "modular_plan": {
+    "anchor_order": [
+      "airlock checkpoint",
+      "landing pad",
+      "main landing pad"
+    ],
+    "module_families": [
+      "road",
+      "service_alley",
+      "hangar",
+      "utility_room",
+      "tower",
+      "pad"
+    ],
+    "placement_rules": [
+      "Buildings should face the primary route or a plaza edge.",
+      "Dead ends require a visual payoff module such as a tower, prop cluster, or gate.",
+      "Back-of-house modules should not block landmark sightlines.",
+      "Boundary modules should close silhouettes before prop dressing begins."
+    ]
+  },
+  "pipeline_steps": [
+    "Parse the plain sentence into world tags, counts, and landmarks.",
+    "Choose the sci-fi module kit in blocky style on a 24-stud grid.",
+    "Generate a main-road layout with 1 main route(s) and 2 supporting branch(es).",
+    "Reserve 3 landmark slots and place spawn at airlock checkpoint.",
+    "Snap districts and module families into place with dense density and 20% open space.",
+    "Run a light prop pass using the palette steel, off-white, safety orange.",
+    "Validate routing, landmark readability, connector compatibility, and boundary closure."
+  ]
+}
